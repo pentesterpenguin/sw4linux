@@ -318,15 +318,21 @@ int check_if_in_container() {
     if (fptr == NULL) return 0;
     fgets(process_name, 16, fptr);
     process_name[strcspn(process_name, "\n")] = 0;
+
     // Encrypted version of: "init"
     char *init_str = decrypt_string(enc_init_str, enc_init_str_keys, sizeof(enc_init_str));
+    if (strcmp(process_name, init_str) == 0) {
+        fclose(fptr);
+        return 0;  // Normal SysV init
+    }
+
     // Encrypted version of: "systemd"
     char *systemd_str = decrypt_string(enc_systemd_str, enc_systemd_str_keys, sizeof(enc_systemd_str));
-    if ((strcmp(process_name, init_str)) != 0 && (strcmp(process_name, systemd_str)) != 0) {
+    if (strcmp(process_name, systemd_str) == 0) {
         fclose(fptr);
-        return 1;
+        return 0;  // Normal systemd
     }
 
     fclose(fptr);
-    return 0;
+    return 1;  // Unknown PID 1 = likely container
 }
