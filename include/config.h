@@ -15,6 +15,4 @@
 #define CT_LEN       13
 #define BUF_SIZE     10000
 
-extern const uint8_t key[32];
-
 #endif

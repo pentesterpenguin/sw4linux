@@ -43,7 +43,7 @@ uint8_t xored_key_values_second_chunk[] = {
 void reconstruct_key(uint8_t *aes_key) {
     // get the cleartext addresses where the first 16 bytes lives
     uint16_t cleartext_positions[16] = {0};
-    for(int i = 0; i < sizeof(xor_key_pos) / sizeof(xor_key_pos[0]); i++) {
+    for(size_t i = 0; i < sizeof(xor_key_pos) / sizeof(xor_key_pos[0]); i++) {
         cleartext_positions[i] = xor_key_pos[i] ^ xored_key_index_first_chunk[i];
     }
 

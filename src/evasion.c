@@ -193,20 +193,25 @@ int check_sys_vendor() {
     char vendor_name[50];
     fgets(vendor_name, sizeof(vendor_name), fptr);
 
-    const char *vm_vendors[] = {
-        decrypt_string(enc_vm_vendor_0, enc_vm_vendor_0_keys, sizeof(enc_vm_vendor_0)),
-        decrypt_string(enc_vm_vendor_1, enc_vm_vendor_1_keys, sizeof(enc_vm_vendor_1)),
-        decrypt_string(enc_vm_vendor_2, enc_vm_vendor_2_keys, sizeof(enc_vm_vendor_2)),
-        decrypt_string(enc_vm_vendor_3, enc_vm_vendor_3_keys, sizeof(enc_vm_vendor_3)),
-        decrypt_string(enc_vm_vendor_4, enc_vm_vendor_4_keys, sizeof(enc_vm_vendor_4)),
-        decrypt_string(enc_vm_vendor_5, enc_vm_vendor_5_keys, sizeof(enc_vm_vendor_5)),
-        decrypt_string(enc_vm_vendor_6, enc_vm_vendor_6_keys, sizeof(enc_vm_vendor_6)),
-        decrypt_string(enc_vm_vendor_7, enc_vm_vendor_7_keys, sizeof(enc_vm_vendor_7)),
-        NULL
+    struct {
+        const uint8_t *enc;
+        const uint8_t *keys;
+        size_t len;
+    } vm_vendors[] = {
+        {enc_vm_vendor_0, enc_vm_vendor_0_keys, sizeof(enc_vm_vendor_0)},
+        {enc_vm_vendor_1, enc_vm_vendor_1_keys, sizeof(enc_vm_vendor_1)},
+        {enc_vm_vendor_2, enc_vm_vendor_2_keys, sizeof(enc_vm_vendor_2)},
+        {enc_vm_vendor_3, enc_vm_vendor_3_keys, sizeof(enc_vm_vendor_3)},
+        {enc_vm_vendor_4, enc_vm_vendor_4_keys, sizeof(enc_vm_vendor_4)},
+        {enc_vm_vendor_5, enc_vm_vendor_5_keys, sizeof(enc_vm_vendor_5)},
+        {enc_vm_vendor_6, enc_vm_vendor_6_keys, sizeof(enc_vm_vendor_6)},
+        {enc_vm_vendor_7, enc_vm_vendor_7_keys, sizeof(enc_vm_vendor_7)},
+        {NULL, NULL, 0}
     };
 
-    for (int i = 0; vm_vendors[i] != NULL; i++) {
-        if (strstr(vendor_name, vm_vendors[i]) != NULL) {
+    for (int i = 0; vm_vendors[i].enc != NULL; i++) {
+        char *vendor_str = decrypt_string(vm_vendors[i].enc, vm_vendors[i].keys, vm_vendors[i].len);
+        if (strstr(vendor_name, vendor_str) != NULL) {
             fclose(fptr);
             return 1;
         }
@@ -227,24 +232,29 @@ int check_product_name() {
     char target_vm_product[50];
     fgets(target_vm_product, sizeof(target_vm_product), fptr);
 
-    const char *vm_products[] = {
-        decrypt_string(enc_vm_product_0, enc_vm_product_0_keys, sizeof(enc_vm_product_0)),
-        decrypt_string(enc_vm_product_1, enc_vm_product_1_keys, sizeof(enc_vm_product_1)),
-        decrypt_string(enc_vm_product_2, enc_vm_product_2_keys, sizeof(enc_vm_product_2)),
-        decrypt_string(enc_vm_product_3, enc_vm_product_3_keys, sizeof(enc_vm_product_3)),
-        decrypt_string(enc_vm_product_4, enc_vm_product_4_keys, sizeof(enc_vm_product_4)),
-        decrypt_string(enc_vm_product_5, enc_vm_product_5_keys, sizeof(enc_vm_product_5)),
-        decrypt_string(enc_vm_product_6, enc_vm_product_6_keys, sizeof(enc_vm_product_6)),
-        decrypt_string(enc_vm_product_7, enc_vm_product_7_keys, sizeof(enc_vm_product_7)),
-        decrypt_string(enc_vm_product_8, enc_vm_product_8_keys, sizeof(enc_vm_product_8)),
-        decrypt_string(enc_vm_product_9, enc_vm_product_9_keys, sizeof(enc_vm_product_9)),
-        decrypt_string(enc_vm_product_10, enc_vm_product_10_keys, sizeof(enc_vm_product_10)),
-        decrypt_string(enc_vm_product_11, enc_vm_product_11_keys, sizeof(enc_vm_product_11)),
-        NULL
+    struct {
+        const uint8_t *enc;
+        const uint8_t *keys;
+        size_t len;
+    } vm_products[] = {
+        {enc_vm_product_0, enc_vm_product_0_keys, sizeof(enc_vm_product_0)},
+        {enc_vm_product_1, enc_vm_product_1_keys, sizeof(enc_vm_product_1)},
+        {enc_vm_product_2, enc_vm_product_2_keys, sizeof(enc_vm_product_2)},
+        {enc_vm_product_3, enc_vm_product_3_keys, sizeof(enc_vm_product_3)},
+        {enc_vm_product_4, enc_vm_product_4_keys, sizeof(enc_vm_product_4)},
+        {enc_vm_product_5, enc_vm_product_5_keys, sizeof(enc_vm_product_5)},
+        {enc_vm_product_6, enc_vm_product_6_keys, sizeof(enc_vm_product_6)},
+        {enc_vm_product_7, enc_vm_product_7_keys, sizeof(enc_vm_product_7)},
+        {enc_vm_product_8, enc_vm_product_8_keys, sizeof(enc_vm_product_8)},
+        {enc_vm_product_9, enc_vm_product_9_keys, sizeof(enc_vm_product_9)},
+        {enc_vm_product_10, enc_vm_product_10_keys, sizeof(enc_vm_product_10)},
+        {enc_vm_product_11, enc_vm_product_11_keys, sizeof(enc_vm_product_11)},
+        {NULL, NULL, 0}
     };
 
-    for (int i = 0; vm_products[i] != NULL; i++) {
-        if (strstr(target_vm_product, vm_products[i]) != NULL) {
+    for (int i = 0; vm_products[i].enc != NULL; i++) {
+        char *product_str = decrypt_string(vm_products[i].enc, vm_products[i].keys, vm_products[i].len);
+        if (strstr(target_vm_product, product_str) != NULL) {
             fclose(fptr);
             return 1;
         }

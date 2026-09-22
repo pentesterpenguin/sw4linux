@@ -1,6 +1,6 @@
 CC      = gcc
 CFLAGS  = -Wall -Wextra -Iinclude
-LDFLAGS = -lssl -lcrypto
+LDFLAGS = -lssl -lcrypto -Wl,-z,noexecstack
 TARGET  = implant
 SRCS    = src/main.c src/crypto.c src/shell.c src/evasion.c
 EXTRA_OBJS = grid.o
